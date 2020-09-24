@@ -307,6 +307,13 @@ void ElementwiseDivCompute<T, PType>::Run() {
   auto x_dims = param.X->dims();
   auto y_dims = param.Y->dims();
   int pre, n, post;
+  if (x_dims.production() == 1) {
+    int e_num = y_dims.production();
+    for (int i = 0; i < e_num; ++i) {
+      out_data[i] = x_data[0] / y_data[i];
+    }
+    return;
+  }
   if (x_dims.size() < y_dims.size()) {
     LOG(FATAL) << "elewise div don't support x_dims size < y_dims size";
   }
